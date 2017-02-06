@@ -2,12 +2,14 @@ from buildbot.plugins import steps, util
 
 
 class BSDSysInfo(steps.ShellSequence):
-    describe = 'FreeBSD System Info'
+    name = 'FreeBSD System Info'
+    alwaysRun = True
 
-    def __init__(self):
-        logfile = 'sysinfo'
+    def __init__(self, **kwargs):
+        logfile = 'stdio'
         commands = (
-            util.ShellArg(command=['uname', '-a'], logfile=logfile),
             util.ShellArg(command=['freebsd-version'], logfile=logfile),
+            util.ShellArg(command=['uname', '-a'], logfile=logfile),
         )
-        super(BSDSysInfo, self).__init__(commands=commands)
+
+        super(BSDSysInfo, self).__init__(commands=commands, **kwargs)
