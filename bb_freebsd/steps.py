@@ -1,3 +1,5 @@
+import shlex
+
 from buildbot.plugins import steps, util
 
 
@@ -17,44 +19,42 @@ class BSDSysInfo(steps.ShellSequence):
 
 class BSDSetMakeEnv(steps.SetPropertyFromCommand):
     '''
-    Set the property ``make_env`` from ``make -V``
+    Set the property ``make_env`` from ``make -V MAKE_ENV``
 
-    :param vars: a list of varaibles. e.g.
-        ``['CC', 'CFLAGS', 'CXX', 'CXXFLAGS']``
+    :param uses: set the ``USES`` macro.  Reference:
+        https://www.freebsd.org/doc/en/books/porters-handbook/book.html#uses
+
     :return: a iterable contains some ``steps``
     '''
 
-    name = 'Set make env'
+    name = 'Set make_env'
 
-    def __init__(self, vars):
-        self.vars = vars
+    def __init__(self, uses=None):
+        self.uses = uses
 
         super(BSDSetMakeEnv, self).__init__(
             command=self.__cmd,
             extract_fn=self.extract,
-            strip=False
+            initialStdin=self.makefile,
+            strip=True,
         )
 
     @property
     def __cmd(self):
-        ret = ['make', '-f', '-', self.makefile]
-        for v in self.vars:
-            ret.extend(['-V', v])
-        return ret
+        return ['make', '-f', '-', '-V', 'MAKE_ENV']
 
     @property
     def makefile(self):
         lines = (
+            ('USES={}'.format(self.uses) if self.uses else ''),
             '.include <bsd.port.mk>',
         )
         return '\n'.join(lines)
 
     def extract(self, rc, stdout, stderr):
-        vals = stdout.split('\n')
-        del vals[-1]
-
-        assert len(self.vars) == len(vals)
+        envs =((k,v) for k, _, v in
+               (s.partition('=') for s in shlex.split(stdout)))
 
         return {
-            'make_env': dict(zip(self.vars, vals))
+            'make_env': dict(envs)
         }
