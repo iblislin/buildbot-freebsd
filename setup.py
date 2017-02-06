@@ -44,6 +44,7 @@ setup(
     entry_points = {
         'buildbot.steps': [
             'BSDSysInfo = bb_freebsd.steps:BSDSysInfo',
+            'BSDSetMakeEnv = bb_freebsd.steps:BSDSetMakeEnv',
         ],
         'buildbot.util': [
             'freebsd = bb_freebsd.util',
