@@ -3,6 +3,15 @@ buildbot-freebsd
 
 The buildbot plugin for freebsd.
 
+
+Installation
+----------------------------------------------------------------------
+
+::
+
+    pip install git+https://github.com/iblis17/buildbot-freebsd.git
+
+
 Sample Usage
 ----------------------------------------------------------------------
 
