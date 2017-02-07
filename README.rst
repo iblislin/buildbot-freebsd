@@ -40,7 +40,7 @@ BSDSetMakeEnv
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 This step will set a property ``make_env`` to the result
- of ``make -V MAKE_ENV``. This property will be a python dictionary.
+of ``make -V MAKE_ENV``. This property will be a python dictionary.
 
 By default the ``Makefile`` read by ``make``::
 
