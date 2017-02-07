@@ -31,9 +31,9 @@ BSDSysInfo
 
 A Simple ``ShellSequence`` that invokes
 
-    - ``freebsd-version``
+- ``freebsd-version``
 
-    - ``uname -a``
+- ``uname -a``
 
 
 BSDSetMakeEnv
@@ -50,9 +50,9 @@ So this step will require that there is a ports tree on worker.
 
 Parameters:
 
-    :uses: set the ``USES`` macro in ``Makefile``.
-		Reference:
-        https://www.freebsd.org/doc/en/books/porters-handbook/book.html#uses
+:uses: set the ``USES`` macro in ``Makefile``.
+    Reference:
+    https://www.freebsd.org/doc/en/books/porters-handbook/book.html#uses
 
 
 LICENSE
