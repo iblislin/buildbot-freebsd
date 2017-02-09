@@ -6,6 +6,7 @@ from buildbot.plugins import steps, util
 class BSDSysInfo(steps.ShellSequence):
     name = 'FreeBSD System Info'
     alwaysRun = True
+    logEnviron = False
 
     def __init__(self, **kwargs):
         logfile = 'stdio'

@@ -46,9 +46,6 @@ setup(
             'BSDSysInfo = bb_freebsd.steps:BSDSysInfo',
             'BSDSetMakeEnv = bb_freebsd.steps:BSDSetMakeEnv',
         ],
-        'buildbot.util': [
-            'freebsd = bb_freebsd.util',
-        ]
     },
     # install_requires=get_requires(),
     tests_require=['coverage', 'pytest', 'pytest-cov', 'tox', 'mock'],
