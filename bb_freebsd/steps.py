@@ -8,14 +8,25 @@ class BSDSysInfo(steps.ShellSequence):
     alwaysRun = True
     logEnviron = False
 
-    def __init__(self, **kwargs):
+    def __init__(self, pkginfo=False, pkgs=None, **kwargs):
         logfile = 'stdio'
-        commands = (
+        commands = [
             util.ShellArg(command=['freebsd-version'], logfile=logfile),
             util.ShellArg(command=['uname', '-a'], logfile=logfile),
-        )
+        ]
+
+        if pkginfo:
+            commands.append(
+                util.ShellArg(command=['pkg', 'info'], logfile='pkg'),
+            )
+            if pkgs:
+                commands.extend([self.pkg_info(pkg) for pkg in pkgs])
 
         super(BSDSysInfo, self).__init__(commands=commands, **kwargs)
+
+    def pkg_info(self, pkg):
+        return util.ShellArg(command=['pkg', 'info', pkg],
+                             logfile='pkg-{}'.format(pkg))
 
 
 class BSDSetMakeEnv(steps.SetPropertyFromCommand):
