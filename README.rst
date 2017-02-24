@@ -44,6 +44,8 @@ A Simple ``ShellSequence`` that invokes
 
 - ``uname -a``
 
+- ``pkg info``: *optional*. Enabled via ``pkginfo=True```
+
 
 BSDSetMakeEnv
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

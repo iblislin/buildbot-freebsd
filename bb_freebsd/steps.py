@@ -29,31 +29,33 @@ class BSDSysInfo(steps.ShellSequence):
                              logfile='pkg-{}'.format(pkg))
 
 
-class BSDSetMakeEnv(steps.SetPropertyFromCommand):
+class BSDSetMakeVar(steps.SetPropertyFromCommand):
     '''
-    Set the property ``make_env`` from ``make -V MAKE_ENV``
+    Set the property ``name`` from ``make -V VAR``
 
+    :param names: list of property names
+    :param vars: list of variable names
     :param uses: set the ``USES`` macro.  Reference:
         https://www.freebsd.org/doc/en/books/porters-handbook/book.html#uses
-
-    :return: a iterable contains some ``steps``
     '''
 
-    name = 'Set make_env'
-
-    def __init__(self, uses=None):
+    def __init__(self, names, vars, uses=None, **kwargs):
+        self.names = names
+        self.name = 'Set {}'.format(', '.join(names))
+        self.vars = vars
         self.uses = uses
 
-        super(BSDSetMakeEnv, self).__init__(
+        super(BSDSetMakeVar, self).__init__(
             command=self.__cmd,
             extract_fn=self.extract,
             initialStdin=self.makefile,
-            strip=True,
+            strip=False,
+            **kwargs
         )
 
     @property
     def __cmd(self):
-        return ['make', '-f', '-', '-V', 'MAKE_ENV']
+        return ['make', '-f', '-'] + ['-V{}'.format(v) for v in self.vars]
 
     @property
     def makefile(self):
@@ -62,6 +64,21 @@ class BSDSetMakeEnv(steps.SetPropertyFromCommand):
             '.include <bsd.port.mk>',
         )
         return '\n'.join(lines)
+
+    def extract(self, rc, stdout, stderr):
+        return dict(zip(self.names, stdout.split('\n')))
+
+
+class BSDSetMakeEnv(BSDSetMakeVar):
+    '''
+    Set the property ``make_env`` from ``make -V MAKE_ENV``
+    '''
+    def __init__(self, **kwargs):
+        super(BSDSetMakeEnv, self).__init__(
+            ['make_env'],
+            ['MAKE_ENV'],
+            **kwargs
+        )
 
     def extract(self, rc, stdout, stderr):
         envs =((k,v) for k, _, v in
