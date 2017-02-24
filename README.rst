@@ -19,6 +19,7 @@ Sample Usage
 
 	factory.addSteps([
 		steps.BSDSysInfo(),
+		steps.BSDSetMakeVar(['make_jobs'], ['MAKE_JOBS_NUMBER']),
 		steps.BSDSetMakeEnv(uses='fortran'),
 
 		steps.GitHub(
@@ -27,7 +28,7 @@ Sample Usage
 			method='fresh'),
 
 		steps.Compile(
-			command=['make', 'all'],
+			command=['make', 'all', '-j', util.Property('make_jobs')],
 			env=util.Property('make_env')),  # set FC, FFLAGS, etc properly
 	])
 
@@ -45,6 +46,26 @@ A Simple ``ShellSequence`` that invokes
 - ``uname -a``
 
 - ``pkg info``: *optional*. Enabled via ``pkginfo=True```
+
+
+BSDSetMakeVar
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Set the property ``name`` from ``make -V VAR``.
+
+By default the ``Makefile`` read by ``make``::
+
+    .include <bsd.port.mk>
+
+So this step will require that there is a ports tree on worker.
+
+Parameters:
+
+:names: list of property names
+:vars: list of variable names
+:uses: set the ``USES`` macro in ``Makefile``.
+    Reference:
+    https://www.freebsd.org/doc/en/books/porters-handbook/book.html#uses
 
 
 BSDSetMakeEnv
