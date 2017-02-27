@@ -18,7 +18,13 @@ Sample Usage
 .. code-block:: python
 
 	factory.addSteps([
-		steps.BSDSysInfo(),
+		steps.BSDSysInfo(
+            pkginfo=True,
+            pkgs=[
+                'llvm38',
+                'libunwind',
+                'pcre2',
+            ]),
 		steps.BSDSetMakeVar(['make_jobs'], ['MAKE_JOBS_NUMBER']),
 		steps.BSDSetMakeEnv(uses='fortran'),
 
