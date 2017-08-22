@@ -1,7 +1,10 @@
 buildbot-freebsd
 ===============================================================================
 
-The buildbot plugin for freebsd.
+A Buildbot_ plugin for FreeBSD_.
+
+.. _Buildbot: https://buildbot.net/
+.. _FreeBSD: https://www.freebsd.org/
 
 
 Installation
